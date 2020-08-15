@@ -6,23 +6,24 @@ const puppeteer = require('puppeteer');
   const contentFile = fs.readFileSync('website_list.txt', 'utf8');
   const arrayWebSite = contentFile.split('\n');
 
+  // Open browser
+  const browser = await puppeteer.launch({ headless: true });
   while(true){
-    // Open browser
-    const browser = await puppeteer.launch({ headless: true });
-
     for(let i = 0; i < arrayWebSite.length; i++){
-      // Open a new page
-      const page = await browser.newPage();
-      await page.waitFor(5000);
+      if(arrayWebSite[i].match(/^$/g) === null){
+        // Open a new page
+        const page = await browser.newPage();
+        await page.waitFor(5000);
 
-      // Redirect to page
-      await page.goto(arrayWebSite[i]);
-      await page.waitFor(10000);
+        // Redirect to page
+        await page.goto(arrayWebSite[i]);
+        await page.waitFor(10000);
 
-      // Close page
-      await page.close();
-      console.log("Visited: " + arrayWebSite[i]);
-      await page.waitFor(8000);
+        // Close page
+        await page.close();
+        console.log("Visited: " + arrayWebSite[i]);
+        await page.waitFor(8000);
+      }
     }
   }
 })();
